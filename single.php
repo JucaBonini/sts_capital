@@ -116,6 +116,11 @@ $categories = get_the_category();
             <!-- Artigo -->
             <div class="article-content prose prose-slate dark:prose-invert max-w-none text-lg leading-relaxed text-slate-700 dark:text-slate-300">
                 <?php the_content(); ?>
+                
+                <!-- Anúncio Final do Artigo -->
+                <div class="mt-12">
+                    <?php sts_display_ad('article_bottom_ad'); ?>
+                </div>
             </div>
 
             <!-- Footer do Post -->

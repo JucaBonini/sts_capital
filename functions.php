@@ -1442,7 +1442,8 @@ function sts_capital_customize_register($wp_customize) {
         'in_feed_ad'    => 'Banner In-Feed (Home)',
         'sidebar_top_ad' => 'Banner Lateral Topo',
         'sidebar_bottom_ad' => 'Banner Lateral Rodapé',
-        'article_middle_ad' => 'Anúncio Meio do Artigo'
+        'article_middle_ad' => 'Anúncio Meio do Artigo',
+        'article_bottom_ad' => 'Banner Final do Artigo'
     );
 
     foreach ($slots as $id => $label) {
