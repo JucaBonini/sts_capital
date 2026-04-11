@@ -1414,37 +1414,6 @@ function sts_capital_inject_schema() {
 }
 add_action( 'wp_head', 'sts_capital_inject_schema' );
 
-/**
- * Item 4: Native Ad Management System (Replaces Ad Plugins)
- */
-function sts_capital_customize_register( $wp_customize ) {
-    $wp_customize->add_section( 'sts_ads_section' , array(
-        'title'      => 'Configurações de Publicidade (Ads)',
-        'priority'   => 30,
-    ) );
-
-    $ad_slots = array(
-        'top_billboard'    => 'Billboard Superior (Home/Arquivos)',
-        'in_feed_ad'       => 'Banner In-Feed (Home)',
-        'sidebar_top_ad'   => 'Banner Lateral Topo',
-        'sidebar_bottom_ad'=> 'Banner Lateral Rodapé',
-        'article_top_ad'   => 'Banner Topo do Artigo',
-        'article_middle_ad'=> 'Banner Meio do Artigo (Automático)',
-        'article_bottom_ad'=> 'Banner Final do Artigo'
-    );
-
-    foreach ($ad_slots as $id => $label) {
-        $wp_customize->add_setting( "sts_ad_$id", array( 'default' => '', 'sanitize_callback' => 'base64_encode_ad' ) );
-        $wp_customize->add_control( "sts_ad_$id", array(
-            'label'    => $label,
-            'section'  => 'sts_ads_section',
-            'type'     => 'textarea',
-            'description' => 'Cole aqui o código HTML/AdSense.'
-        ) );
-    }
-}
-function base64_encode_ad($input) { return $input; } // Bypass for HTML
-add_action( 'customize_register', 'sts_capital_customize_register' );
 
 /**
  * Helper to display ad if exists
