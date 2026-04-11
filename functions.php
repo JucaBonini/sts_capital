@@ -199,6 +199,15 @@ function sts_capital_tailwind_config() {
         .article-content p { font-family: 'Inter', sans-serif; font-size: 1.125rem; line-height: 1.75; color: #091d2e; margin-bottom: 1.5rem; }
         .glass-panel { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
         
+        /* FIX: Forçar Anúncio Billboard Superior a ROLAR com a página */
+        .sts-ad-top_billboard {
+            position: relative !important;
+            display: block !important;
+            z-index: 10 !important;
+            margin-top: 0 !important;
+            clear: both;
+        }
+
         /* WordPress Admin Bar fix */
         body.admin-bar .fixed.top-0 { top: 32px !important; }
         @media (max-width: 782px) {
@@ -1443,10 +1452,55 @@ add_action( 'customize_register', 'sts_capital_customize_register' );
 function sts_display_ad($slot_id, $placeholder = '') {
     $ad_code = get_theme_mod("sts_ad_$slot_id");
     if ( !empty($ad_code) ) {
-        echo '<div class="sts-ad-slot sts-ad-' . esc_attr($slot_id) . ' mb-12 flex justify-center w-full overflow-hidden">' . $ad_code . '</div>';
+        echo '<div class="sts-ad-slot sts-ad-' . esc_attr($slot_id) . ' flex justify-center w-full overflow-hidden">' . $ad_code . '</div>';
     } elseif ( !empty($placeholder) && current_user_can('manage_options') ) {
         echo $placeholder;
     }
+}
+
+/**
+ * Register Customizer Ad Slots
+ */
+function sts_capital_customize_register($wp_customize) {
+    // Section: Publicidade
+    $wp_customize->add_section('sts_ads_section', array(
+        'title'    => 'Publicidade & Anúncios',
+        'priority' => 30,
+    ));
+
+    $slots = array(
+        'top_billboard' => 'Billboard Superior (Home/Arquivos)',
+        'in_feed_ad'    => 'Banner In-Feed (Home)',
+        'sidebar_top_ad' => 'Banner Lateral Topo',
+        'sidebar_bottom_ad' => 'Banner Lateral Rodapé',
+        'article_middle_ad' => 'Anúncio Meio do Artigo'
+    );
+
+    foreach ($slots as $id => $label) {
+        $wp_customize->add_setting("sts_ad_$id", array(
+            'default'           => '',
+            'sanitize_callback' => 'sts_sanitize_ad_code', // Custom sanitization for HTML/JS
+            'transport'         => 'refresh',
+        ));
+
+        $wp_customize->add_control("sts_ad_$id", array(
+            'label'    => $label,
+            'section'  => 'sts_ads_section',
+            'type'     => 'textarea',
+            'description' => 'Cole aqui o código HTML/AdSense.',
+        ));
+    }
+}
+add_action('customize_register', 'sts_capital_customize_register');
+
+/**
+ * Sanitization for Ad Codes (Allow scripts/HTML)
+ */
+function sts_sanitize_ad_code($input) {
+    if ( current_user_can('unfiltered_html') ) {
+        return $input;
+    }
+    return wp_kses_post($input);
 }
 
 /**
