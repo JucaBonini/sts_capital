@@ -1,0 +1,13 @@
+# WordPress Theme Git Ignore
+.DS_Store
+Thumbs.db
+*.log
+error_log
+node_modules/
+dist/
+.env
+.vscode/
+.idea/
+
+# Stripe Config (Opcional se desejar ocultar as chaves)
+stripe-config.php

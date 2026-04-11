@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Kinetic Grid | Solar Tech Intelligence</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed-variant": "#004b73",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-fixed": "#390c00",
+                    "tertiary": "#98472a",
+                    "inverse-primary": "#4ae183",
+                    "error": "#ba1a1a",
+                    "surface-bright": "#f7f9ff",
+                    "on-error": "#ffffff",
+                    "inverse-surface": "#203243",
+                    "on-primary-container": "#005027",
+                    "surface-container-low": "#edf4ff",
+                    "surface-container": "#e3efff",
+                    "outline-variant": "#bbcbbb",
+                    "secondary-fixed-dim": "#92ccff",
+                    "on-tertiary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "tertiary-container": "#ff9875",
+                    "on-primary": "#ffffff",
+                    "primary": "#006d37",
+                    "tertiary-fixed-dim": "#ffb59d",
+                    "on-primary-fixed": "#00210c",
+                    "surface": "#f7f9ff",
+                    "on-secondary-container": "#00476e",
+                    "tertiary-fixed": "#ffdbd0",
+                    "surface-container-highest": "#d1e4fb",
+                    "surface-container-high": "#d9eaff",
+                    "primary-fixed": "#6bfe9c",
+                    "error-container": "#ffdad6",
+                    "surface-variant": "#d1e4fb",
+                    "on-tertiary-container": "#772e14",
+                    "on-primary-fixed-variant": "#005228",
+                    "on-surface-variant": "#3d4a3e",
+                    "background": "#f7f9ff",
+                    "on-background": "#091d2e",
+                    "on-secondary-fixed": "#001d31",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-dim": "#c9dcf3",
+                    "secondary": "#006397",
+                    "secondary-container": "#5cb8fd",
+                    "outline": "#6c7b6d",
+                    "on-tertiary-fixed-variant": "#793015",
+                    "surface-tint": "#006d37",
+                    "primary-container": "#2ecc71",
+                    "primary-fixed-dim": "#4ae183",
+                    "inverse-on-surface": "#e8f2ff",
+                    "on-surface": "#091d2e",
+                    "secondary-fixed": "#cce5ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .article-content h2 { font-family: 'Manrope', sans-serif; font-size: 2rem; font-weight: 700; color: #091d2e; margin-top: 2.5rem; margin-bottom: 1.25rem; letter-spacing: -0.02em; }
+        .article-content h3 { font-family: 'Manrope', sans-serif; font-size: 1.5rem; font-weight: 600; color: #091d2e; margin-top: 2rem; margin-bottom: 1rem; }
+        .article-content p { font-family: 'Inter', sans-serif; font-size: 1.125rem; line-height: 1.75; color: #091d2e; margin-bottom: 1.5rem; }
+        .glass-panel { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-slate-50/80 dark:bg-slate-900/80 backdrop-blur-md">
+<div class="flex justify-between items-center px-8 py-4 max-w-screen-2xl mx-auto">
+<div class="text-2xl font-black tracking-tighter text-slate-900 dark:text-white">The Kinetic Grid</div>
+<nav class="hidden md:flex gap-8 items-center">
+<a class="font-manrope tracking-tight font-bold uppercase text-xs text-slate-600 dark:text-slate-400 hover:text-emerald-500 transition-colors" href="#">Home</a>
+<a class="font-manrope tracking-tight font-bold uppercase text-xs text-emerald-600 dark:text-emerald-400 border-b-2 border-emerald-500 pb-1" href="#">Blog</a>
+<a class="font-manrope tracking-tight font-bold uppercase text-xs text-slate-600 dark:text-slate-400 hover:text-emerald-500 transition-colors" href="#">Categories</a>
+<a class="font-manrope tracking-tight font-bold uppercase text-xs text-slate-600 dark:text-slate-400 hover:text-emerald-500 transition-colors" href="#">About</a>
+<a class="font-manrope tracking-tight font-bold uppercase text-xs text-slate-600 dark:text-slate-400 hover:text-emerald-500 transition-colors" href="#">Contact</a>
+</nav>
+<div class="flex items-center gap-6">
+<div class="hidden sm:block text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined align-middle">search</span>
+</div>
+<button class="bg-gradient-to-br from-primary to-primary-container px-6 py-2 text-white font-bold rounded-md hover:opacity-80 transition-all duration-300 scale-95 duration-200 ease-in-out">Subscribe</button>
+</div>
+</div>
+<div class="bg-slate-200 dark:bg-slate-800 h-[1px] w-full block"></div>
+</header>
+<main class="pt-24 pb-20 max-w-screen-2xl mx-auto px-8 grid grid-cols-1 lg:grid-cols-12 gap-12">
+<!-- Sidebar Navigation -->
+<aside class="hidden lg:flex flex-col w-64 p-6 gap-4 bg-slate-100 dark:bg-slate-800/50 rounded-none h-screen sticky top-20 lg:col-span-3">
+<div class="mb-6">
+<div class="text-lg font-bold text-slate-900 dark:text-white">Intelligence Hub</div>
+<div class="text-xs text-slate-500 uppercase tracking-widest font-label">Live Grid Updates</div>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 p-3 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition-all hover:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="trending_up">trending_up</span>
+<span class="font-inter text-sm font-medium">Trending</span>
+</a>
+<a class="flex items-center gap-3 text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-900/20 rounded-lg p-3" href="#">
+<span class="material-symbols-outlined" data-icon="wb_sunny">wb_sunny</span>
+<span class="font-inter text-sm font-medium">Solar Tech</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 p-3 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition-all hover:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="air">air</span>
+<span class="font-inter text-sm font-medium">Wind Power</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 p-3 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition-all hover:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="policy">policy</span>
+<span class="font-inter text-sm font-medium">Policy</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 p-3 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition-all hover:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="mail">mail</span>
+<span class="font-inter text-sm font-medium">Newsletter</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 border-t border-slate-200 dark:border-slate-700">
+<button class="w-full text-center bg-primary text-white py-3 rounded-lg font-bold text-sm">Join the Network</button>
+</div>
+</aside>
+<!-- Main Article Content -->
+<article class="lg:col-span-6">
+<!-- Article Header -->
+<div class="mb-10">
+<div class="flex items-center gap-3 mb-6">
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-xs font-bold font-label tracking-wider uppercase">Solar Tech</span>
+<span class="text-on-surface-variant font-label text-xs uppercase tracking-widest">8 min read</span>
+</div>
+<h1 class="text-4xl md:text-6xl font-headline font-extrabold tracking-tight leading-tight text-on-surface mb-8">
+                    The Next Wave of Perovskite: Beyond 30% Efficiency Barriers
+                </h1>
+<div class="flex items-center gap-4 py-6 border-y border-surface-container-high">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-surface-container-highest">
+<img alt="Author" class="w-full h-full object-cover" data-alt="close-up portrait of a middle-aged scientist wearing glasses in a brightly lit laboratory setting with soft focus background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9LDd-v65rYqoU1MyWE67D-dLH_drYkgYy2UUGUYIK-xnO1n7isl05rvY-NldRMfWEmISs-BwPodT9hFpTEUfPrwLJuhsXur8ZpOb_1SMsXCeHbTYif7NXAQ9jwDeQh6TyFh0V8yyvuTpYq5HUpgPL87mYkSze_mcXSHyF3iWPpgXRcE_VJlp5dRtIbDpXclPL08fejZ_t6tFl3r90kDqiy46OQpjGGxT9uRbyanDyD0xHeOql62HQmsuAO28kyA_By07tR15rGcA"/>
+</div>
+<div>
+<p class="font-bold text-on-surface m-0 p-0 leading-none">Dr. Alistair Vance</p>
+<p class="text-sm text-on-surface-variant m-0 p-0 mt-1">Lead Research Associate, Grid Dynamics</p>
+</div>
+<div class="ml-auto flex gap-2">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined" data-icon="share">share</span></button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined" data-icon="bookmark">bookmark</span></button>
+</div>
+</div>
+</div>
+<!-- AdSense Placeholder Top -->
+<div class="w-full h-32 bg-surface-container-low mb-10 flex items-center justify-center border border-dashed border-outline-variant rounded-xl group hover:bg-surface-container transition-colors">
+<span class="text-outline font-label text-xs tracking-widest uppercase opacity-60">Sponsored Advertisement Area</span>
+</div>
+<!-- Featured Image -->
+<div class="relative w-full aspect-video rounded-xl overflow-hidden mb-12 shadow-2xl">
+<img alt="Solar Arrays" class="w-full h-full object-cover" data-alt="macro photograph of shimmering blue perovskite solar cells arranged in a precise geometric pattern under intense bright white laboratory lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5Q6YvTkYIxCkPVzVf5ohsHnp9fek5W9wkD1fQa_SDgT2Fmf36sLFgh0rYIxTtAznGjCb7EuXkEjzVJA_0zDVUO6_6-r7qYhJlp79L9HVg8jjUzZbxTkiJNk_nzb7MTvZPPRPJUNkfFjsbqUpnYoUpQqL4kc37RSZzkr9a6QRNWpe3Hg4vOrPZPzoIy55IMjP1yhHnulmREoHSyBJT1OsiHjWmZyNW5GFOz8GWFIREwF8wYIrSQCJMeKOXFu_jPmqkTW2CQ0jgyK0"/>
+<div class="absolute bottom-4 left-4 glass-panel px-4 py-2 rounded-lg">
+<p class="text-xs font-medium text-on-surface">Experimental Silicon-Perovskite tandem cell, 2024 prototype.</p>
+</div>
+</div>
+<!-- Content -->
+<div class="article-content">
+<p class="text-xl font-medium leading-relaxed mb-10 text-on-surface opacity-90">
+                    The race for solar efficiency has found its new champion. While silicon has dominated the landscape for decades, the integration of perovskite materials is pushing theoretical limits into reality, promising a future of ultra-low-cost, high-yield energy production.
+                </p>
+<h2>Breaking the Shockley-Queisser Limit</h2>
+<p>
+                    For years, the solar industry has operated under the constraints of the Shockley-Queisser limit—a theoretical maximum efficiency for single-junction solar cells. However, by stacking materials with different bandgaps, researchers at the Kinetic Grid Intelligence Hub are now demonstrating tandem cells that capture a wider spectrum of sunlight.
+                </p>
+<p>
+                    These tandem structures utilize a traditional silicon base layer to capture infrared light, while an upper perovskite layer efficiently converts the blue and green portions of the visible spectrum. This dual-layered approach is the cornerstone of what we call the "Kinetic Leap."
+                </p>
+<div class="my-12 p-8 bg-surface-container-low rounded-xl border-l-4 border-primary">
+<p class="italic text-xl text-primary font-headline font-bold mb-0">
+                        "We are no longer looking at incremental gains. We are looking at a fundamental shift in the economics of light-to-electron conversion."
+                    </p>
+</div>
+<h3>The Stability Challenge</h3>
+<p>
+                    While efficiency records are falling weekly, the "elephant in the clean-room" remains stability. Perovskite crystals are notoriously sensitive to moisture and heat. Our latest field tests in the Mojave desert show that encapsulation techniques inspired by aerospace glass bonding can extend cell life to over 20 years.
+                </p>
+<p>
+                    Recent breakthroughs in cation engineering—replacing unstable organic components with inorganic alternatives like Cesium—have resulted in thermal resilience that finally matches industry standards for outdoor deployment.
+                </p>
+<!-- AdSense Placeholder Middle -->
+<div class="w-full aspect-[16/5] bg-surface-container-low my-12 flex items-center justify-center border border-dashed border-outline-variant rounded-xl group hover:bg-surface-container transition-colors">
+<div class="text-center">
+<span class="text-outline font-label text-xs tracking-widest uppercase block mb-2 opacity-60">Advertisement</span>
+<div class="w-48 h-2 bg-outline-variant rounded-full mx-auto opacity-20"></div>
+</div>
+</div>
+<h2>Infrastructure Integration</h2>
+<p>
+                    The real power of these thin-film materials lies in their flexibility. Imagine a world where every window, every car roof, and every skyscraper facade is a generating asset. The Kinetic Grid is mapping the deployment of "transparent solar glass" in major metropolitan hubs.
+                </p>
+</div>
+<!-- Social Share Bar -->
+<div class="flex items-center gap-4 mt-16 py-8 border-t border-surface-container-high">
+<span class="font-label text-xs font-bold uppercase tracking-widest text-on-surface-variant">Share Intelligence:</span>
+<div class="flex gap-2">
+<button class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-container-highest hover:bg-primary hover:text-white transition-all"><span class="material-symbols-outlined text-sm" data-icon="facebook">social_leaderboard</span></button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-container-highest hover:bg-primary hover:text-white transition-all"><span class="material-symbols-outlined text-sm" data-icon="x">close</span></button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-container-highest hover:bg-primary hover:text-white transition-all"><span class="material-symbols-outlined text-sm" data-icon="linkedin">link</span></button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-container-highest hover:bg-primary hover:text-white transition-all"><span class="material-symbols-outlined text-sm" data-icon="mail">mail</span></button>
+</div>
+</div>
+<!-- Solar Installation CTA -->
+<section class="mt-20 bg-inverse-surface rounded-2xl p-10 relative overflow-hidden text-inverse-on-surface">
+<div class="relative z-10">
+<h2 class="text-white mt-0 mb-4 text-3xl">Ready to join the Grid?</h2>
+<p class="text-inverse-on-surface opacity-80 mb-8 max-w-md">Our intelligence-driven quote system calculates your roof's exact energy potential based on regional perovskite-ready solar maps.</p>
+<div class="flex flex-col sm:flex-row gap-4">
+<input class="bg-surface-container-highest/10 border-none rounded-sm px-6 py-4 flex-grow focus:ring-2 focus:ring-primary text-white placeholder-white/40" placeholder="Enter your Zip Code" type="text"/>
+<button class="bg-gradient-to-r from-primary to-primary-container text-white px-8 py-4 rounded-md font-bold hover:opacity-90 transition-all">Get Free Quote</button>
+</div>
+</div>
+<!-- Abstract visual element -->
+<div class="absolute -right-20 -bottom-20 w-80 h-80 bg-primary opacity-10 rounded-full blur-[100px]"></div>
+<div class="absolute top-0 right-0 p-8 opacity-20">
+<span class="material-symbols-outlined text-8xl" data-icon="wb_sunny" style="font-variation-settings: 'FILL' 1;">wb_sunny</span>
+</div>
+</section>
+</article>
+<!-- Right Column Sidebar -->
+<aside class="lg:col-span-3">
+<div class="sticky top-24 flex flex-col gap-12">
+<!-- Related Posts -->
+<section>
+<h4 class="font-headline font-bold text-on-surface mb-6 uppercase tracking-wider text-sm border-b-2 border-primary-container pb-2 inline-block">Top Intelligence</h4>
+<div class="space-y-8">
+<a class="group block" href="#">
+<div class="aspect-video bg-surface-container rounded-lg mb-3 overflow-hidden">
+<img alt="Wind Farm" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="dramatic wide shot of offshore wind turbines standing in calm blue ocean water during a misty sunrise with pastel pink and orange sky" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCN7HoWyGyqDqngZ5ytNcEeWR9xyKrGbt80WcpDAp_fX84aRsnnXnTXmq2tzgsFAjclFiGxLy6qc6sbJaB7RVWBlN6V-dlWYercizkMciqFHy0rlbEGVshGk9dvkyffEAM7IlTt7scf5fn-53ZHgZ_9N2JEzGWiqRQ2XY0TqLtFPn-elYELvBrtq-Kjmo9cGvGEW6c553iUUjkcJrMqOJya5yfWYoSwwonTl_jDm46RJEZ5Fp-4LZrNHHi7mh_3DUq7WhOPfiwf7jQ"/>
+</div>
+<span class="text-[10px] font-label font-bold text-primary uppercase tracking-widest">Wind Power</span>
+<h5 class="font-headline font-bold text-sm leading-snug group-hover:text-primary transition-colors mt-1">Offshore Turbines Reach New Vertical Milestones</h5>
+</a>
+<a class="group block" href="#">
+<div class="aspect-video bg-surface-container rounded-lg mb-3 overflow-hidden">
+<img alt="Grid Tech" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="modern industrial interior of a smart grid control room with large glowing data visualization screens reflecting on polished dark floors" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYdA1Kgj7DQnq6ZAbcom0FmKZ5MIKFaNmNU2VWlpFZ8TG1GMUW55tgIy6e2l2u5pTQGQp4spK9y5jb6f7_W1lTkEMeDRswBlkE7hHgk2e1Ij07_qSOmszyjV1eVJuHakIwzJ2-QfHApyq4ueAReK6slI-WEASrkBB14V-mtl9_I_OWhpovnmdGuaCChWrf176OFgNADOQm5YhxzQr_Ot5Mn4SyViGJ3XOKUAAdht-AkjM2reQ7Yi4pBcc6oXocAvkcNDS-oGM25Lc"/>
+</div>
+<span class="text-[10px] font-label font-bold text-secondary uppercase tracking-widest">Policy</span>
+<h5 class="font-headline font-bold text-sm leading-snug group-hover:text-primary transition-colors mt-1">Decentralizing the EU Grid: A 2025 Roadmap</h5>
+</a>
+</div>
+</section>
+<!-- Newsletter Card -->
+<div class="bg-surface-container p-8 rounded-xl">
+<span class="material-symbols-outlined text-primary mb-4" data-icon="bolt">bolt</span>
+<h4 class="font-headline font-bold mb-2">The Weekly Pulse</h4>
+<p class="text-sm text-on-surface-variant mb-6">Deep technical dives and industry shifts delivered every Tuesday.</p>
+<button class="w-full py-3 border border-primary text-primary font-bold rounded hover:bg-primary hover:text-white transition-all text-sm">Join 45k Readers</button>
+</div>
+<!-- Sticky Ad -->
+<div class="w-full h-96 bg-surface-container-low flex items-center justify-center border border-dashed border-outline-variant rounded-xl group hover:bg-surface-container transition-colors">
+<span class="text-outline font-label text-xs tracking-widest uppercase opacity-60 [writing-mode:vertical-lr]">Advertisement Section</span>
+</div>
+</div>
+</aside>
+</main>
+<!-- Footer -->
+<footer class="bg-slate-900 dark:bg-slate-950 w-full py-12 px-8 border-t border-slate-800">
+<div class="max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+<div class="col-span-1 md:col-span-1">
+<div class="text-xl font-black text-white mb-4">The Kinetic Grid</div>
+<p class="text-slate-400 text-xs leading-relaxed mb-6">Architecting the sustainable transition through high-fidelity data and engineering intelligence.</p>
+<div class="flex gap-4">
+<a class="text-slate-400 hover:text-emerald-400" href="#"><span class="material-symbols-outlined">public</span></a>
+<a class="text-slate-400 hover:text-emerald-400" href="#"><span class="material-symbols-outlined">hub</span></a>
+<a class="text-slate-400 hover:text-emerald-400" href="#"><span class="material-symbols-outlined">rss_feed</span></a>
+</div>
+</div>
+<div>
+<h6 class="text-white font-bold text-sm mb-6 uppercase tracking-wider">Resources</h6>
+<ul class="space-y-4">
+<li><a class="text-slate-400 hover:text-emerald-400 transition-colors font-inter text-xs tracking-wider uppercase" href="#">Case Studies</a></li>
+<li><a class="text-slate-400 hover:text-emerald-400 transition-colors font-inter text-xs tracking-wider uppercase" href="#">Market Analysis</a></li>
+<li><a class="text-slate-400 hover:text-emerald-400 transition-colors font-inter text-xs tracking-wider uppercase" href="#">Open Source Tools</a></li>
+</ul>
+</div>
+<div>
+<h6 class="text-white font-bold text-sm mb-6 uppercase tracking-wider">Legal</h6>
+<ul class="space-y-4">
+<li><a class="text-slate-400 hover:text-emerald-400 transition-colors font-inter text-xs tracking-wider uppercase" href="#">Privacy Policy</a></li>
+<li><a class="text-slate-400 hover:text-emerald-400 transition-colors font-inter text-xs tracking-wider uppercase" href="#">Terms of Service</a></li>
+<li><a class="text-slate-400 hover:text-emerald-400 transition-colors font-inter text-xs tracking-wider uppercase" href="#">Cookie Settings</a></li>
+</ul>
+</div>
+<div>
+<h6 class="text-white font-bold text-sm mb-6 uppercase tracking-wider">Connect</h6>
+<div class="bg-slate-800 p-1 rounded flex">
+<input class="bg-transparent border-none text-white text-xs w-full focus:ring-0" placeholder="Email" type="text"/>
+<button class="bg-emerald-500 text-slate-900 px-3 py-2 rounded-sm font-bold text-xs">JOIN</button>
+</div>
+</div>
+</div>
+<div class="max-w-screen-2xl mx-auto mt-12 pt-12 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-slate-400 font-inter text-xs tracking-wider uppercase">© 2024 The Kinetic Grid. Engineered for Sustainability.</p>
+<div class="flex gap-8">
+<a class="text-slate-400 hover:text-emerald-400 text-xs uppercase tracking-widest" href="#">RSS Feed</a>
+<a class="text-slate-400 hover:text-emerald-400 text-xs uppercase tracking-widest" href="#">Archives</a>
+</div>
+</div>
+</footer>
+</body></html>

@@ -1,0 +1,142 @@
+/*
+Theme Name: sts-capital (Capital Consciente)
+Theme URI: https://capitalconsciente.com.br/
+Author: Juca Souza
+Description: A minimalist, clean-tech news portal optimized for the Solar Energy industry. Clean aesthetics, balanced whitespace, and elite Google News integration.
+Version: 3.0.0
+Text Domain: sts-capital
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&family=Inter:wght@400;500;700&display=swap');
+
+:root {
+    /* Color Palette - Clean Energy Luxe */
+    --bg: #ffffff;
+    --bg-alt: #f8fafc;
+    --text: #0f172a;
+    --text-muted: #64748b;
+    --accent: #0066ff;
+    /* Electric Energy Blue */
+    --accent-glow: rgba(0, 102, 255, 0.1);
+    --success: #10b981;
+    /* Sustainability Green */
+    --border: #e2e8f0;
+
+    /* Typography */
+    --font-heading: 'Manrope', sans-serif;
+    --font-body: 'Inter', sans-serif;
+
+    /* Spacing */
+    --gap: 2rem;
+    --radius: 12px;
+}
+
+/* --- Base --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+.container {
+    width: 90%;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+/* --- Modern Typography --- */
+h1,
+h2,
+h3,
+h4 {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.04em;
+    line-height: 1.2;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+a:hover {
+    color: var(--accent);
+}
+
+/* --- Components --- */
+
+/* Premium Badge */
+.badge-pro {
+    display: inline-flex;
+    padding: 6px 14px;
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+    margin-bottom: 1rem;
+}
+
+/* Featured Card */
+.card-minimal {
+    border-radius: var(--radius);
+    transition: transform 0.4s cubic-bezier(0.2, 0, 0, 1);
+    overflow: hidden;
+}
+
+.card-minimal:hover {
+    transform: translateY(-8px);
+}
+
+.card-minimal img {
+    aspect-ratio: 16/10;
+    object-fit: cover;
+    border-radius: var(--radius);
+}
+
+/* Buttons */
+.btn-premium {
+    background: var(--text);
+    color: #fff;
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-premium:hover {
+    background: var(--accent);
+}
+
+/* Sticky Header */
+.site-header-clean {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 92%;
+    }
+}
