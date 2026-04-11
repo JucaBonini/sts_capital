@@ -10,30 +10,35 @@ $reading_time = ceil($word_count / 200); // Média de 200 palavras por minuto
 $categories = get_the_category();
 ?>
 
+<!-- Billboard Superior (Proteção contra sobreposição do Google Ads) -->
+<div class="pt-32 max-w-screen-2xl mx-auto px-6 lg:px-12 mb-12">
+    <?php sts_display_ad('top_billboard'); ?>
+</div>
+
 <!-- Container Principal com Grid de 3 Colunas -->
-<main class="max-w-[1700px] mx-auto px-6 lg:px-12 pt-16 lg:pt-32 pb-20">
+<main class="max-w-[1700px] mx-auto px-6 lg:px-12 pb-20">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
         
         <!-- COLUNA 1: NAVEGAÇÃO DO POST (Sidebar Esquerda - 2 Colunas) -->
         <aside class="hidden lg:block lg:col-span-2">
             <div class="sticky top-32 space-y-12">
                 <div>
-                    <h3 class="text-on-surface font-black text-lg leading-tight mb-2">Centro de Inteligência</h3>
-                    <p class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400">Navegação do Post</p>
+                    <h3 class="text-on-surface font-black text-lg leading-tight mb-2">Editoria Premium</h3>
+                    <p class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400">Navegação do Fluxo</p>
                 </div>
 
                 <nav class="space-y-6">
-                    <a href="<?php echo home_url(); ?>" class="flex items-center gap-4 text-slate-400 hover:text-primary transition-all group">
-                        <span class="material-symbols-outlined text-[20px]">home</span>
-                        <span class="text-xs font-bold">Feed Principal</span>
+                    <a href="<?php echo home_url('/dashboard-instalador'); ?>" class="flex items-center gap-4 text-slate-400 hover:text-primary transition-all group">
+                        <span class="material-symbols-outlined text-[20px]">dashboard</span>
+                        <span class="text-xs font-bold">Dashboard Hub</span>
+                    </a>
+                    <a href="<?php echo home_url('/blog'); ?>" class="flex items-center gap-4 text-slate-400 hover:text-primary transition-all">
+                        <span class="material-symbols-outlined text-[20px]">feed</span>
+                        <span class="text-xs font-bold">Últimas Notícias</span>
                     </a>
                     <a href="#" class="flex items-center gap-4 text-emerald-500 transition-all">
-                        <span class="material-symbols-outlined text-[20px] animate-pulse">wb_sunny</span>
-                        <span class="text-xs font-black">Lendo Agora</span>
-                    </a>
-                    <a href="#radar" class="flex items-center gap-4 text-slate-400 hover:text-primary transition-all">
-                        <span class="material-symbols-outlined text-[20px]">trending_up</span>
-                        <span class="text-xs font-bold">Tendências</span>
+                        <span class="material-symbols-outlined text-[20px] animate-pulse">analytics</span>
+                        <span class="text-xs font-black">Análise Atual</span>
                     </a>
                     <a href="#newsletter" class="flex items-center gap-4 text-slate-400 hover:text-primary transition-all">
                         <span class="material-symbols-outlined text-[20px]">mail</span>
@@ -118,8 +123,8 @@ $categories = get_the_category();
                 <div class="bg-indigo-950 p-12 rounded-[3.5rem] text-white overflow-hidden relative group">
                     <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                         <div>
-                            <h3 class="text-3xl font-black mb-4 leading-tight">Radar Capital:<br>A Newsletter.</h3>
-                            <p class="text-sm opacity-70">A análise mais profunda sobre o mercado solar enviada toda segunda-feira.</p>
+                            <h3 class="text-3xl font-black mb-4 leading-tight text-white">Radar Capital:<br>A Newsletter.</h3>
+                            <p class="text-sm opacity-70 text-white">A análise mais profunda sobre o mercado solar enviada toda segunda-feira.</p>
                         </div>
                         <div id="newsletter-form-container">
                             <form id="newsletter-form" class="flex flex-col gap-4">
