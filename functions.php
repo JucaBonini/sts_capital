@@ -1511,6 +1511,13 @@ add_filter('the_content', 'sts_capital_inject_middle_ad', 10);
  * Inject Open Graph and Twitter Meta Tags
  */
 function sts_capital_inject_social_meta() {
+    $site_name = get_bloginfo('name');
+    $title = '';
+    $desc = '';
+    $url = home_url();
+    $img = get_site_icon_url(512) ?: 'https://via.placeholder.com/1200x630';
+    $type = 'website';
+
     if ( is_singular() ) {
         global $post;
         $seo_title = get_post_meta($post->ID, '_sts_seo_title', true);
@@ -1519,24 +1526,29 @@ function sts_capital_inject_social_meta() {
         $title = $seo_title ?: get_the_title();
         $desc = $seo_desc ?: wp_trim_words(get_the_excerpt(), 25);
         $url = get_permalink();
-        $img = get_the_post_thumbnail_url($post->ID, 'large');
-        $site_name = get_bloginfo('name');
+        $type = 'article';
+        $post_img = get_the_post_thumbnail_url($post->ID, 'large');
+        if ($post_img) $img = $post_img;
+    } elseif ( is_home() || is_front_page() ) {
+        $title = $site_name . ' | ' . get_bloginfo('description');
+        $desc = get_bloginfo('description');
+    } elseif ( is_archive() ) {
+        $title = get_the_archive_title();
+        $desc = get_the_archive_description() ?: 'Explorar as últimas publicações e análises do setor solar em ' . $site_name;
+    }
 
-        echo "\n<!-- Social Meta Assets -->\n";
-        echo '<meta property="og:type" content="article">' . "\n";
+    if ( $title ) {
+        echo "\n<!-- Social Meta Assets (Elite SEO) -->\n";
+        echo '<meta property="og:type" content="' . esc_attr($type) . '">' . "\n";
         echo '<meta property="og:title" content="' . esc_attr($title) . '">' . "\n";
         echo '<meta property="og:description" content="' . esc_attr($desc) . '">' . "\n";
         echo '<meta property="og:url" content="' . esc_url($url) . '">' . "\n";
         echo '<meta property="og:site_name" content="' . esc_attr($site_name) . '">' . "\n";
-        if ($img) {
-            echo '<meta property="og:image" content="' . esc_url($img) . '">' . "\n";
-        }
+        echo '<meta property="og:image" content="' . esc_url($img) . '">' . "\n";
         echo '<meta name="twitter:card" content="summary_large_image">' . "\n";
         echo '<meta name="twitter:title" content="' . esc_attr($title) . '">' . "\n";
         echo '<meta name="twitter:description" content="' . esc_attr($desc) . '">' . "\n";
-        if ($img) {
-            echo '<meta name="twitter:image" content="' . esc_url($img) . '">' . "\n";
-        }
+        echo '<meta name="twitter:image" content="' . esc_url($img) . '">' . "\n";
     }
 }
 add_action( 'wp_head', 'sts_capital_inject_social_meta', 5 );
@@ -1589,59 +1601,198 @@ function sts_capital_auto_sponsored_links( $content ) {
 add_filter( 'the_content', 'sts_capital_auto_sponsored_links' );
 
 /**
- * Google News Sitemap
- * URL: /sitemap-news.xml
+ * INFRAESTRUTURA DE SITEMAPS NATIVA (Zero Plugin)
+ * Implementação completa: Index, News, Posts, Pages e Instaladores.
  */
-function sts_capital_news_sitemap_rewrite() {
-    add_rewrite_rule( 'sitemap-news\.xml$', 'index.php?sts_news_sitemap=1', 'top' );
-}
-add_action( 'init', 'sts_capital_news_sitemap_rewrite' );
 
-function sts_capital_query_vars( $vars ) {
-    $vars[] = 'sts_news_sitemap';
+// 1. Registro de Regras de Reescrita para URLs amigáveis
+function sts_capital_sitemap_rewrites() {
+    add_rewrite_rule( 'sitemap\.xml$', 'index.php?sts_sitemap=index', 'top' );
+    add_rewrite_rule( 'sitemap-news\.xml$', 'index.php?sts_sitemap=news', 'top' );
+    add_rewrite_rule( 'sitemap-posts\.xml$', 'index.php?sts_sitemap=posts', 'top' );
+    add_rewrite_rule( 'sitemap-pages\.xml$', 'index.php?sts_sitemap=pages', 'top' );
+    add_rewrite_rule( 'sitemap-instaladores\.xml$', 'index.php?sts_sitemap=installers', 'top' );
+    add_rewrite_rule( 'sitemap-categorias\.xml$', 'index.php?sts_sitemap=categories', 'top' );
+}
+add_action( 'init', 'sts_capital_sitemap_rewrites' );
+
+// 2. Registro de Query Vars
+function sts_capital_sitemap_query_vars( $vars ) {
+    $vars[] = 'sts_sitemap';
     return $vars;
 }
-add_filter( 'query_vars', 'sts_capital_query_vars' );
+add_filter( 'query_vars', 'sts_capital_sitemap_query_vars' );
 
-function sts_capital_news_sitemap_output() {
-    if ( get_query_var( 'sts_news_sitemap' ) ) {
-        $args = array(
-            'post_type'      => 'post',
-            'posts_per_page' => 1000,
-            'date_query'     => array(
-                array(
-                    'after' => '48 hours ago',
-                ),
-            ),
-        );
-        $query = new WP_Query( $args );
+// 3. Roteamento e Output dos Sitemaps
+function sts_capital_sitemap_router() {
+    $type = get_query_var( 'sts_sitemap' );
+    if ( ! $type ) return;
 
-        header( 'Content-Type: application/xml; charset=utf-8' );
-        echo '<?xml version="1.0" encoding="UTF-8"?>';
-        echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">';
+    header( 'Content-Type: application/xml; charset=utf-8' );
+    echo '<?xml version="1.0" encoding="UTF-8"?>';
 
-        if ( $query->have_posts() ) {
-            while ( $query->have_posts() ) {
-                $query->the_post();
-                echo '<url>';
-                echo '<loc>' . get_permalink() . '</loc>';
-                echo '<news:news>';
-                echo '<news:publication>';
-                echo '<news:name>' . esc_xml( get_bloginfo( 'name' ) ) . '</news:name>';
-                echo '<news:language>pt-br</news:language>';
-                echo '</news:publication>';
-                echo '<news:publication_date>' . get_the_date( 'c' ) . '</news:publication_date>';
-                echo '<news:title>' . esc_xml( get_the_title() ) . '</news:title>';
-                echo '</news:news>';
-                echo '</url>';
-            }
-        }
-        echo '</urlset>';
-        wp_reset_postdata();
-        exit;
+    switch ( $type ) {
+        case 'index':
+            sts_capital_output_sitemap_index();
+            break;
+        case 'news':
+            sts_capital_output_sitemap_news();
+            break;
+        case 'posts':
+            sts_capital_output_sitemap_posts();
+            break;
+        case 'pages':
+            sts_capital_output_sitemap_pages();
+            break;
+        case 'installers':
+            sts_capital_output_sitemap_installers();
+            break;
+        case 'categories':
+            sts_capital_output_sitemap_categories();
+            break;
     }
+    exit;
 }
-add_action( 'template_redirect', 'sts_capital_news_sitemap_output' );
+add_action( 'template_redirect', 'sts_capital_sitemap_router' );
+
+/**
+ * Funções Auxiliares de Output
+ */
+
+// SITEMAP INDEX
+function sts_capital_output_sitemap_index() {
+    echo '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+    $sitemaps = array( 'news', 'posts', 'pages', 'installers', 'categorias' );
+    foreach ( $sitemaps as $s ) {
+        echo '<sitemap>';
+        echo '<loc>' . home_url( "/sitemap-{$s}.xml" ) . '</loc>';
+        echo '<lastmod>' . date( 'c' ) . '</lastmod>';
+        echo '</sitemap>';
+    }
+    echo '</sitemapindex>';
+}
+
+// GOOGLE NEWS SITEMAP (Últimas 48 horas)
+function sts_capital_output_sitemap_news() {
+    $query = new WP_Query( array(
+        'post_type'      => 'post',
+        'posts_per_page' => 100,
+        'date_query'     => array( array( 'after' => '48 hours ago' ) ),
+        'post_status'    => 'publish'
+    ) );
+
+    echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">';
+    if ( $query->have_posts() ) {
+        $site_name = esc_xml( get_bloginfo( 'name' ) );
+        while ( $query->have_posts() ) {
+            $query->the_post();
+            echo '<url>';
+            echo '<loc>' . get_permalink() . '</loc>';
+            echo '<news:news>';
+            echo '<news:publication><news:name>' . $site_name . '</news:name><news:language>pt-br</news:language></news:publication>';
+            echo '<news:publication_date>' . get_the_date( 'c' ) . '</news:publication_date>';
+            echo '<news:title>' . esc_xml( get_the_title() ) . '</news:title>';
+            echo '</news:news>';
+            echo '</url>';
+        }
+    }
+    echo '</urlset>';
+    wp_reset_postdata();
+}
+
+// POSTS SITEMAP (Geral)
+function sts_capital_output_sitemap_posts() {
+    $query = new WP_Query( array(
+        'post_type'      => 'post',
+        'posts_per_page' => 500,
+        'post_status'    => 'publish'
+    ) );
+
+    echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+    if ( $query->have_posts() ) {
+        while ( $query->have_posts() ) {
+            $query->the_post();
+            echo '<url>';
+            echo '<loc>' . get_permalink() . '</loc>';
+            echo '<lastmod>' . get_the_modified_date( 'c' ) . '</lastmod>';
+            echo '<changefreq>weekly</changefreq>';
+            echo '<priority>0.7</priority>';
+            echo '</url>';
+        }
+    }
+    echo '</urlset>';
+    wp_reset_postdata();
+}
+
+// PAGES SITEMAP
+function sts_capital_output_sitemap_pages() {
+    $query = new WP_Query( array(
+        'post_type'      => 'page',
+        'posts_per_page' => -1,
+        'post_status'    => 'publish'
+    ) );
+
+    echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+    while ( $query->have_posts() ) {
+        $query->the_post();
+        echo '<url>';
+        echo '<loc>' . get_permalink() . '</loc>';
+        echo '<lastmod>' . get_the_modified_date( 'c' ) . '</lastmod>';
+        echo '<priority>0.5</priority>';
+        echo '</url>';
+    }
+    echo '</urlset>';
+    wp_reset_postdata();
+}
+
+// INSTALLERS SITEMAP
+function sts_capital_output_sitemap_installers() {
+    $query = new WP_Query( array(
+        'post_type'      => 'instalador',
+        'posts_per_page' => -1,
+        'post_status'    => 'publish'
+    ) );
+
+    echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+    while ( $query->have_posts() ) {
+        $query->the_post();
+        echo '<url>';
+        echo '<loc>' . get_permalink() . '</loc>';
+        echo '<lastmod>' . get_the_modified_date( 'c' ) . '</lastmod>';
+        echo '<priority>0.8</priority>';
+        echo '</url>';
+    }
+    echo '</urlset>';
+    wp_reset_postdata();
+}
+
+// CATEGORIES SITEMAP
+function sts_capital_output_sitemap_categories() {
+    $terms = get_terms( array(
+        'taxonomy'   => 'category',
+        'hide_empty' => true,
+    ) );
+
+    echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+    if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) {
+        foreach ( $terms as $term ) {
+            echo '<url>';
+            echo '<loc>' . get_term_link( $term ) . '</loc>';
+            echo '<changefreq>daily</changefreq>';
+            echo '<priority>0.6</priority>';
+            echo '</url>';
+        }
+    }
+    echo '</urlset>';
+}
+
+// 4. Injeção no robots.txt
+function sts_capital_robots_txt( $output, $public ) {
+    $output .= "Sitemap: " . home_url( '/sitemap.xml' ) . "\n";
+    $output .= "Sitemap: " . home_url( '/sitemap-news.xml' ) . "\n";
+    return $output;
+}
+add_filter( 'robots_txt', 'sts_capital_robots_txt', 10, 2 );
 
 /**
  * Mobile Menu JS - Updated for Tailwind Design
@@ -1924,10 +2075,10 @@ function sts_capital_auto_create_pages() {
         }
     }
     
-    // Forçar flush das regras de permalink para evitar 404
-    if ( get_option('sts_permalinks_flushed') !== 'yes' ) {
+    // Forçar flush das regras de permalink para garantir que sitemaps funcionem
+    if ( get_option('sts_sitemaps_v1_flushed') !== 'yes' ) {
         flush_rewrite_rules();
-        update_option('sts_permalinks_flushed', 'yes');
+        update_option('sts_sitemaps_v1_flushed', 'yes');
     }
 }
 add_action('init', 'sts_capital_auto_create_pages');
