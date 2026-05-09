@@ -30,6 +30,7 @@ if ( ! function_exists( 'sts_capital_setup' ) ) :
             id mediumint(9) NOT NULL AUTO_INCREMENT,
             time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
             email varchar(100) NOT NULL,
+            name varchar(255) DEFAULT '',
             PRIMARY KEY  (id)
         ) $charset_collate;";
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
@@ -757,7 +758,8 @@ function sts_capital_handle_newsletter() {
 
     $result = $wpdb->insert($table_name, array(
         'time'  => current_time('mysql'),
-        'email' => $email
+        'email' => $email,
+        'name'  => isset($_POST['name']) ? sanitize_text_field($_POST['name']) : ''
     ));
 
     if ($result) {
@@ -1075,13 +1077,15 @@ function sts_capital_leads_page() {
         <table class="widefat fixed" cellspacing="0">
             <thead>
                 <tr>
-                    <th class="manage-column column-columnname" scope="col">E-mail</th>
-                    <th class="manage-column column-columnname" scope="col">Data de Inscrição</th>
+                    <th class="manage-column" scope="col">Nome</th>
+                    <th class="manage-column" scope="col">E-mail</th>
+                    <th class="manage-column" scope="col">Data de Inscrição</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach($leads as $lead): ?>
                 <tr>
+                    <td><?php echo esc_html($lead->name ?: 'Visitante'); ?></td>
                     <td><strong><?php echo esc_html($lead->email); ?></strong></td>
                     <td><?php echo esc_html($lead->time); ?></td>
                 </tr>
@@ -1385,27 +1389,42 @@ function sts_capital_inject_schema() {
         }
     }
 
-    // LocalBusiness Schema for Installers
+    // LocalBusiness Schema for Installers (Enhanced for SEO Local)
     if ( is_singular('instalador') ) {
         global $post;
+        $avg_rating = sts_capital_get_average_rating($post->ID);
+        $review_count = get_comments_number($post->ID);
+        
         $local_schema = array(
             "@context" => "https://schema.org",
             "@type" => "ProfessionalService",
             "name" => get_the_title(),
             "description" => get_the_excerpt(),
             "url" => get_permalink(),
+            "priceRange" => "R$$ - R$$$$",
             "address" => array(
                 "@type" => "PostalAddress",
                 "streetAddress" => get_post_meta($post->ID, '_sts_address', true),
-                "addressLocality" => get_post_meta($post->ID, '_sts_location_raw', true)
+                "addressLocality" => get_post_meta($post->ID, '_sts_location_raw', true),
+                "addressCountry" => "BR"
             ),
             "telephone" => get_post_meta($post->ID, '_sts_phone', true),
             "contactPoint" => array(
                 "@type" => "ContactPoint",
                 "telephone" => get_post_meta($post->ID, '_sts_whatsapp', true),
                 "contactType" => "sales"
-            )
+            ),
+            "knowsAbout" => array("Energia Solar", "Energia Fotovoltaica", "Engenharia Elétrica")
         );
+        
+        if ($avg_rating > 0) {
+            $local_schema["aggregateRating"] = array(
+                "@type"       => "AggregateRating",
+                "ratingValue" => $avg_rating,
+                "reviewCount" => $review_count
+            );
+        }
+
         if ( has_post_thumbnail() ) {
             $local_schema['image'] = get_the_post_thumbnail_url(get_the_ID(), 'full');
         }
@@ -1413,6 +1432,39 @@ function sts_capital_inject_schema() {
     }
 }
 add_action( 'wp_head', 'sts_capital_inject_schema' );
+
+/**
+ * Native XML Sitemap Generator (Elite SEO)
+ * Generates a clean sitemap without plugins.
+ */
+function sts_capital_generate_sitemap() {
+    $posts_for_sitemap = get_posts(array(
+        'numberposts' => -1,
+        'orderby'     => 'modified',
+        'post_type'    => array('post', 'page', 'instalador'),
+        'order'       => 'DESC'
+    ));
+
+    $sitemap = '<?xml version="1.0" encoding="UTF-8"?>';
+    $sitemap .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+
+    foreach($posts_for_sitemap as $post) {
+        $sitemap .= '<url>'.
+            '<loc>'. get_permalink($post->ID) .'</loc>'.
+            '<lastmod>'. mysql2date('Y-m-d\TH:i:s+00:00', $post->post_modified_gmt, false) .'</lastmod>'.
+            '<changefreq>weekly</changefreq>'.
+            '<priority>0.8</priority>'.
+        '</url>';
+    }
+
+    $sitemap .= '</urlset>';
+
+    $fp = fopen(ABSPATH . 'sitemap.xml', 'w');
+    fwrite($fp, $sitemap);
+    fclose($fp);
+}
+add_action('save_post', 'sts_capital_generate_sitemap');
+add_action('publish_post', 'sts_capital_generate_sitemap');
 
 
 /**
@@ -1438,12 +1490,12 @@ function sts_capital_customize_register($wp_customize) {
     ));
 
     $slots = array(
-        'top_billboard' => 'Billboard Superior (Home/Arquivos)',
-        'in_feed_ad'    => 'Banner In-Feed (Home)',
-        'sidebar_top_ad' => 'Banner Lateral Topo',
-        'sidebar_bottom_ad' => 'Banner Lateral Rodapé',
-        'article_middle_ad' => 'Anúncio Meio do Artigo',
-        'article_bottom_ad' => 'Banner Final do Artigo'
+        'top_billboard'     => 'Billboard Superior (Topo do Site - Impacto Total)',
+        'in_feed_ad'        => 'Banner In-Feed (Home - Entre posts)',
+        'sidebar_top_ad'    => 'Lateral Superior (Sidebar - Visibilidade Fixa)',
+        'sidebar_bottom_ad' => 'Lateral Rodapé (Sidebar)',
+        'article_middle_ad' => 'Meio do Artigo (In-Article - Maior CTR)',
+        'article_bottom_ad' => 'Final do Artigo (Pós-Leitura - Conversão)'
     );
 
     foreach ($slots as $id => $label) {
@@ -1459,6 +1511,48 @@ function sts_capital_customize_register($wp_customize) {
             'type'     => 'textarea',
             'description' => 'Cole aqui o código HTML/AdSense.',
         ));
+    }
+
+    // Section: Configurações Globais de SEO/Conversão
+    $wp_customize->add_section('sts_global_seo', array(
+        'title'    => 'Configurações Globais (SEO)',
+        'priority' => 20,
+    ));
+
+    $wp_customize->add_setting('sts_calculator_url', array('default' => home_url('/calculadora-solar/'), 'sanitize_callback' => 'esc_url_raw'));
+    $wp_customize->add_control('sts_calculator_url', array(
+        'label'    => 'URL da sua Calculadora Solar',
+        'section'  => 'sts_global_seo',
+        'type'     => 'url',
+        'description' => 'Link para a página que você criou com o template da calculadora.'
+    ));
+
+    // Section: Vitrine de Afiliados (Mercado Livre, Amazon, Shopee)
+    $wp_customize->add_section('sts_affiliate_section', array(
+        'title'    => 'Vitrine de Afiliados (Produtos)',
+        'priority' => 31,
+        'description' => 'Configure aqui os produtos recomendados que aparecerão no site.',
+    ));
+
+    for ($i = 1; $i <= 3; $i++) {
+        // Título do Produto
+        $wp_customize->add_setting("sts_aff_title_$i", array('default' => '', 'sanitize_callback' => 'sanitize_text_field'));
+        $wp_customize->add_control("sts_aff_title_$i", array('label' => "Produto $i - Título", 'section' => 'sts_affiliate_section', 'type' => 'text'));
+
+        // Preço/Destaque
+        $wp_customize->add_setting("sts_aff_price_$i", array('default' => '', 'sanitize_callback' => 'sanitize_text_field'));
+        $wp_customize->add_control("sts_aff_price_$i", array('label' => "Produto $i - Preço/Destaque", 'section' => 'sts_affiliate_section', 'type' => 'text'));
+
+        // Link de Afiliado
+        $wp_customize->add_setting("sts_aff_link_$i", array('default' => '', 'sanitize_callback' => 'esc_url_raw'));
+        $wp_customize->add_control("sts_aff_link_$i", array('label' => "Produto $i - Link (Amazon/ML)", 'section' => 'sts_affiliate_section', 'type' => 'url'));
+
+        // Imagem do Produto
+        $wp_customize->add_setting("sts_aff_img_$i", array('default' => '', 'sanitize_callback' => 'esc_url_raw'));
+        $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, "sts_aff_img_$i", array(
+            'label'    => "Produto $i - Imagem",
+            'section'  => 'sts_affiliate_section',
+        )));
     }
 }
 add_action('customize_register', 'sts_capital_customize_register');
@@ -1539,6 +1633,7 @@ function sts_capital_inject_social_meta() {
 
     if ( $title ) {
         echo "\n<!-- Social Meta Assets (Elite SEO) -->\n";
+        echo '<meta name="robots" content="max-image-preview:large">' . "\n";
         echo '<meta property="og:type" content="' . esc_attr($type) . '">' . "\n";
         echo '<meta property="og:title" content="' . esc_attr($title) . '">' . "\n";
         echo '<meta property="og:description" content="' . esc_attr($desc) . '">' . "\n";
@@ -2383,3 +2478,38 @@ function sts_capital_sync_post_to_user($post_id, $post) {
     add_action('profile_update', 'sts_capital_sync_user_to_post');
 }
 add_action('save_post_instalador', 'sts_capital_sync_post_to_user', 20, 2);
+
+/**
+ * Inject a "soft" Calculator CTA in the middle of post content (Elite SEO/UX)
+ */
+function sts_capital_inject_soft_cta( $content ) {
+    if ( ! is_singular( 'post' ) || is_admin() ) return $content;
+
+    $calc_url = get_theme_mod('sts_calculator_url', home_url('/calculadora-solar/'));
+    
+    $cta_html = '
+    <div class="my-10 bg-slate-50 dark:bg-slate-800/50 border-l-4 border-emerald-500 p-8 rounded-r-[2rem] shadow-sm clear-both">
+        <div class="flex items-center gap-3 mb-3">
+            <div class="w-8 h-8 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center">
+                <span class="material-symbols-outlined text-emerald-600 text-sm">calculate</span>
+            </div>
+            <p class="text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">Ferramenta Exclusiva</p>
+        </div>
+        <h4 class="text-lg font-black text-on-surface mb-2">Simule seu Payback Solar Gratuitamente</h4>
+        <p class="text-slate-500 dark:text-slate-400 text-sm mb-6 leading-relaxed">Não feche seu projeto sem antes calcular o tempo de retorno real. Nossa calculadora usa dados oficiais de irradiação para sua cidade.</p>
+        <a href="'.esc_url($calc_url).'" class="inline-flex items-center gap-2 bg-emerald-500 text-white px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-emerald-600 transition-all hover:scale-105 active:scale-95 shadow-lg shadow-emerald-500/20">
+            Calcular Agora
+            <span class="material-symbols-outlined text-[14px]">trending_up</span>
+        </a>
+    </div>';
+
+    $paragraphs = explode( '</p>', $content );
+    
+    // Injeta após o 2º parágrafo (se houver pelo menos 3)
+    if ( count( $paragraphs ) > 2 ) {
+        $paragraphs[1] .= $cta_html;
+    }
+
+    return implode( '</p>', $paragraphs );
+}
+add_filter( 'the_content', 'sts_capital_inject_soft_cta', 20 );
